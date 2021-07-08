@@ -3,11 +3,6 @@ from utils import read_yaml, load_pickle, timeit
 
 
 class FpsSampling:
-    """
-    Computes the farthest-point-sampling of a dataset X
-    """
-    def __init__(self, config_path: str):
-        self.configs = read_yaml(yaml_path=config_path)
 
     @staticmethod
     def calc_distances(p0: np.array, point_array: np.array) -> float:
@@ -54,20 +49,17 @@ class FpsSampling:
             distances = np.minimum(distances, self.calc_distances(farthest_points[i], point_array))
             i += 1
 
-        print('done sampling')
-        return farthest_idx
-
-    def run_all(self):
-        data_pth = self.configs['data_path']
-        data = load_pickle(pickle_path=data_pth)
-        farthest_idx = self.fps_sampling(point_array=data, num_points_to_sample=10)
         return farthest_idx
 
 
 if __name__ == '__main__':
     config_path = '../config.yaml'
-    fs = FpsSampling(config_path=config_path)
-    fs.run_all()
-    print('done')
+    configs = read_yaml(yaml_path=config_path)
+    data_pth = configs['data_path']
+    data = load_pickle(pickle_path=data_pth)
+    n_sampling_points = configs['n_sampling_points']
+    fs = FpsSampling()
+    fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)
+    print('done execution')
 
 
