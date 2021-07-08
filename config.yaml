@@ -1,0 +1,3 @@
+data_path: '../data/randn_10000_3.pkl'
+n_sampling_points : 100
+sigma: 1
