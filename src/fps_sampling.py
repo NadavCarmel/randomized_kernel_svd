@@ -1,5 +1,4 @@
 import numpy as np
-from utils import read_yaml, load_pickle, timeit
 
 
 class FpsSampling:
@@ -17,14 +16,15 @@ class FpsSampling:
         """
         return ((p0 - point_array) ** 2).sum(axis=1)
 
-    @timeit
     def fps_sampling(self, point_array: np.array, num_points_to_sample: int):
         """
         This method performs farthest-point-sampling.
         :param point_array: the data (num_samples, point_dim)
         :param num_points_to_sample: number of points to take
-        :return: the index of the sampled points
+        :return: the indices of the sampled points
         """
+
+        print('start working on fps_sampling')
 
         if num_points_to_sample is None or num_points_to_sample > point_array.shape[0]:
             num_points_to_sample = point_array.shape[0]
@@ -56,6 +56,7 @@ class FpsSampling:
 
 
 if __name__ == '__main__':
+    from utils import read_yaml, load_pickle
     config_path = '../config.yaml'
     configs = read_yaml(yaml_path=config_path)
     data_pth = configs['data_path']
