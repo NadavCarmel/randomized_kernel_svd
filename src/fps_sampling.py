@@ -56,11 +56,11 @@ class FpsSampling:
 
 
 if __name__ == '__main__':
-    from utils import read_yaml, load_pickle
+    import utils
     config_path = '../config.yaml'
-    configs = read_yaml(yaml_path=config_path)
+    configs = utils.read_yaml(yaml_path=config_path)
     data_pth = configs['data_path']
-    data = load_pickle(pickle_path=data_pth)
+    data = utils.load_pickle(pickle_path=data_pth)
     n_sampling_points = configs['n_sampling_points']
     fs = FpsSampling()
     farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)

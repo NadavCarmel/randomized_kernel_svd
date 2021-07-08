@@ -39,14 +39,14 @@ class KernelApproximation:
 
 
 if __name__ == '__main__':
-    from utils import read_yaml, load_pickle
+    import utils
     from fps_sampling import FpsSampling
     # load config
     config_path = '../config.yaml'
-    configs = read_yaml(yaml_path=config_path)
+    configs = utils.read_yaml(yaml_path=config_path)
     # load data:
-    data_pth = configs['data_path']
-    data = load_pickle(pickle_path=data_pth)
+    data_path = configs['data_path']
+    data = utils.load_pickle(pickle_path=data_path)
     # calc farthest-points-idx:
     n_sampling_points = configs['n_sampling_points']
     fs = FpsSampling()
