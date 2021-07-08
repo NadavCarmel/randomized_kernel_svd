@@ -62,7 +62,7 @@ if __name__ == '__main__':
     data = load_pickle(pickle_path=data_pth)
     n_sampling_points = configs['n_sampling_points']
     fs = FpsSampling()
-    fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)
+    farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)
     print('done execution')
 
 
