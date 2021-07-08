@@ -25,11 +25,11 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Calc C and U:
         C, U = self.calc_C_U(data=data, farthest_idx=farthest_idx, sigma=sigma)
 
-        # Scale the rows of C (so they will sum to 1, as in a transition probability matrix):
-        D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))
-        D = np.clip(D, a_min=1, a_max=None)
-        D_norm = D ** 0.5
-        C = C / D_norm
+        # # Scale the rows of C (so they will sum to 1, as in a transition probability matrix):
+        # D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))
+        # D = np.clip(D, a_min=1, a_max=None)
+        # D_norm = D ** 0.5
+        # C = C / D_norm
 
         # Generate a random space for the kernel projection:
         R = np.random.randn(data.shape[0], projection_dim)
@@ -48,7 +48,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
         # Project U back to the original space:
         U = Q @ U
-        U = U / D_norm
+        # U = U / D_norm
 
         return U, s, Vh
 
