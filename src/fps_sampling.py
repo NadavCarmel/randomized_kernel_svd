@@ -22,7 +22,7 @@ class FpsSampling:
         This method performs farthest-point-sampling.
         :param point_array: the data (num_samples, point_dim)
         :param num_points_to_sample: number of points to take
-        :return: the indices of the sampled points
+        :return: farthest_idx -> the indices of the sampled points
         """
 
         print('start working on fps_sampling')

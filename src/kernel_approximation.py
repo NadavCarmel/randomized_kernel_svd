@@ -33,8 +33,6 @@ class KernelApproximation:
         C = np.exp(-d)
         U = C[farthest_idx, :]
         U = np.linalg.pinv(U)
-        print(f'C.shape = {C.shape}')
-        print(f'U.shape = {U.shape}')
         return C, U
 
 

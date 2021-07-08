@@ -14,8 +14,10 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         :param num_points_to_sample: number of points to take
         :param sigma: the distance scale hyper-parameter
         :param projection_dim: the new dimension on which we project the kernel
-        :return: U, s, Vh
+        :return: U, s, Vh -> the svd decomposition of the approximated kernel
         """
+
+        print('start working on randomized_svd')
 
         # FPS sampling:
         farthest_idx = self.fps_sampling(point_array=data, num_points_to_sample=num_points_to_sample)
@@ -50,7 +52,24 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
         return U, s, Vh
 
+    def run_all(self):
+        config_path = '../config.yaml'
+        configs = utils.read_yaml(yaml_path=config_path)
+        data_pth = configs['data_path']
+        data = utils.load_pickle(pickle_path=data_pth)
+        num_points_to_sample = configs['num_points_to_sample']
+        sigma = configs['sigma']
+        projection_dim = configs['projection_dim']
+        U, s, Vh = self.randomized_svd(data=data,
+                                       num_points_to_sample=num_points_to_sample,
+                                       sigma=sigma,
+                                       projection_dim=projection_dim)
+        return U, s, Vh
 
 
+if __name__ == '__main__':
+    rsvd = RandomizedSVD()
+    U, s, Vh = rsvd.run_all()
+    print('dine execution')
 
 
