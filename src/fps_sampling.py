@@ -45,9 +45,9 @@ class FpsSampling:
         i = 1
         while i < num_points_to_sample:  # and tmp_dist > min_distance_threshold
             # Pick farthest point:
-            des_idx = np.argmax(distances)
-            farthest_idx.append(des_idx)
-            farthest_points[i] = point_array[des_idx]
+            farthest_id = np.argmax(distances)
+            farthest_idx.append(farthest_id)
+            farthest_points[i] = point_array[farthest_id]
             # Look at minimum between:
             # 1. distance from current point
             # 2. minimal distance from all sampled points so far
