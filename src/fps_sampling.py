@@ -1,4 +1,5 @@
 import numpy as np
+from typing import List
 
 
 class FpsSampling:
@@ -16,7 +17,7 @@ class FpsSampling:
         """
         return ((p0 - point_array) ** 2).sum(axis=1)
 
-    def fps_sampling(self, point_array: np.array, num_points_to_sample: int):
+    def fps_sampling(self, point_array: np.array, num_points_to_sample: int) -> List[int]:
         """
         This method performs farthest-point-sampling.
         :param point_array: the data (num_samples, point_dim)
@@ -61,9 +62,9 @@ if __name__ == '__main__':
     configs = utils.read_yaml(yaml_path=config_path)
     data_pth = configs['data_path']
     data = utils.load_pickle(pickle_path=data_pth)
-    n_sampling_points = configs['n_sampling_points']
+    num_points_to_sample = configs['num_points_to_sample']
     fs = FpsSampling()
-    farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)
+    farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=num_points_to_sample)
     print('done execution')
 
 
