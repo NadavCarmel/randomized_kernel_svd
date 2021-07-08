@@ -3,6 +3,9 @@ from utils import read_yaml, load_pickle, timeit
 
 
 class FpsSampling:
+    """
+    Compute farthest-point-sampling given a data array and number of points to sample.
+    """
 
     @staticmethod
     def calc_distances(p0: np.array, point_array: np.array) -> float:
@@ -17,7 +20,7 @@ class FpsSampling:
     @timeit
     def fps_sampling(self, point_array: np.array, num_points_to_sample: int):
         """
-        This function performs farthest point sampling.
+        This method performs farthest-point-sampling.
         :param point_array: the data (num_samples, point_dim)
         :param num_points_to_sample: number of points to take
         :return: the index of the sampled points
