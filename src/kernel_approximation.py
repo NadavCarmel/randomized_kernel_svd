@@ -2,7 +2,6 @@ import numpy as np
 from scipy import spatial
 from typing import List, Tuple
 from utils import read_yaml, load_pickle, timeit
-from fps_sampling import FpsSampling
 
 
 class KernelApproximation:
@@ -34,6 +33,7 @@ class KernelApproximation:
 
 
 if __name__ == '__main__':
+    from fps_sampling import FpsSampling
     # load config
     config_path = '../config.yaml'
     configs = read_yaml(yaml_path=config_path)
