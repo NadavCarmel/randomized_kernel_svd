@@ -50,7 +50,6 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         num_points_to_sample = configs['num_points_to_sample']
         sigma = configs['sigma']
         projection_dim = configs['projection_dim']
-        num_components = configs['num_components']
 
         # MAIN STEP 1: approximated-kernel building blocks calculation:
 
