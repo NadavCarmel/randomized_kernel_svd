@@ -39,7 +39,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Project U back to the original space:
         U = Q @ U
 
-        U2 = U / D_sqrt
+        # U = U / D_sqrt  # if we   want to compute the random walk Laplacian SVD (L := I - D ** -1 @ K)
 
         return U, s, Vh
 
@@ -57,6 +57,8 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # FPS sampling:
         farthest_idx = self.fps_sampling(point_array=data,
                                          num_points_to_sample=num_points_to_sample)
+
+        farthest_idx.sort()  # todo: remove
 
         # Calc C and U:
         C, U = self.calc_C_U(data=data,
@@ -81,4 +83,13 @@ if __name__ == '__main__':
     U, s, Vh = rsvd.run_all(config_path=config_path)
     print('dine execution')
 
+
+
+# from scipy.spatial.distance import cdist
+# d = cdist(data[farthest_idx],data[farthest_idx], metric='sqeuclidean')
+# K = np.exp(-d/sigma)
+# D_sqrt_diag = np.diag(np.squeeze(D_sqrt))
+# K_norm = np.linalg.inv(D_sqrt_diag) @ K @ np.linalg.inv(D_sqrt_diag)
+# K_norm_approx = C_scaled @ U @ C_scaled.T
+# U_approx, s_approx, Vh_approx = np.linalg.svd(K_norm_approx, full_matrices=False, compute_uv=True, hermitian=False)
 
