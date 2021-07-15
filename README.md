@@ -1,4 +1,7 @@
 Implementation of normalized Laplacian decomposition (for spectral clustering purposes etc.) by using a randomized SVD approach.
+
+In fact, since we are usually interested at the eigen-vectors associated with the smallest eigen-values of the Laplacian, we *do not* approximate it at all. Rather, we compute the eigen-vectors associated with the *highest* eigen-values of the normalized *symmetric* kernel (adjacency) matrix.
+
 The involves steps are:
 - FPS sampling of the data 
 - Kernel matrix low rank approximation (Nyström approximation)

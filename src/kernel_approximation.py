@@ -31,6 +31,16 @@ class KernelApproximation:
         U = np.linalg.pinv(U)
         return C, U
 
+    @staticmethod
+    def normalize_C(C: np.array, U: np.array) -> Tuple[np.array, np.array]:
+        print('start working on normalize_C')
+        # Scale the rows of C:
+        D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))  # efficient summation of each row in the approximated kernel
+        D = np.clip(D, a_min=1, a_max=None)  # clip D so that each element is at least 1, as in the sum of the original kernel matrix
+        D_norm = (D ** 0.5)[:, None]
+        C_scaled = C / D_norm  # this will convert K to D ** -0.5 @ K @ D ** -0.5
+        return C_scaled, D_norm
+
 
 if __name__ == '__main__':
     import utils
@@ -42,11 +52,12 @@ if __name__ == '__main__':
     data_path = configs['data_path']
     data = utils.load_pickle(pickle_path=data_path)
     # calc farthest-points-idx:
-    n_sampling_points = configs['n_sampling_points']
+    num_points_to_sample = configs['num_points_to_sample']
     fs = FpsSampling()
-    farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=n_sampling_points)
+    farthest_idx = fs.fps_sampling(point_array=data, num_points_to_sample=num_points_to_sample)
     # calc kernel approximation C and U:
     sigma = configs['sigma']
     ka = KernelApproximation()
     C, U = ka.calc_C_U(data=data, farthest_idx=farthest_idx, sigma=sigma)
+    C_scaled, D_norm = ka.normalize_C(C=C, U=U)
     print('done execution')

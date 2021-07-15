@@ -6,18 +6,23 @@ import utils
 
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
-    def randomized_svd(self, data, num_points_to_sample, sigma, projection_dim):
+    def run_all(self, data, num_points_to_sample, sigma, projection_dim, m):
         """
-        Compute all steps of randomized svd.
-        Based on Facebook Research overview: https://research.fb.com/blog/2014/09/fast-randomized-svd/
+        Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
+        We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
+        Computation is based on all steps of the randomized svd
+
         :param data: the data (num_samples, point_dim)
         :param num_points_to_sample: number of points to take
         :param sigma: the distance scale hyper-parameter
         :param projection_dim: the new dimension on which we project the kernel
-        :return: U, s, Vh -> the svd decomposition of the approximated kernel
+        :param m: the number of SVD components to return
+        :return: U, s, Vh -> the svd decomposition of the approximated kernel of order m
         """
 
         print('start working on randomized_svd')
+
+        # MAIN STEP 1: approximated-kernel building blocks calculation:
 
         # FPS sampling:
         farthest_idx = self.fps_sampling(point_array=data, num_points_to_sample=num_points_to_sample)
@@ -25,11 +30,10 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Calc C and U:
         C, U = self.calc_C_U(data=data, farthest_idx=farthest_idx, sigma=sigma)
 
-        # # Scale the rows of C (so they will sum to 1, as in a transition probability matrix):
-        # D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))
-        # D = np.clip(D, a_min=1, a_max=None)
-        # D_norm = D ** 0.5
-        # C = C / D_norm
+        # Scale the rows of C:
+        C, D_norm = self.normalize_C(C, U)
+
+        # MAIN STEP 2: randomized svd:
 
         # Generate a random space for the kernel projection:
         R = np.random.randn(data.shape[0], projection_dim)
