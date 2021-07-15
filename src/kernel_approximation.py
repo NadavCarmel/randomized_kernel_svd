@@ -4,9 +4,6 @@ from typing import List, Tuple
 
 
 class KernelApproximation:
-    """
-    Computes Nyström approximation of a kernel matrix.
-    """
 
     @staticmethod
     def calc_exact_kernel(data: np.array, sigma: float) -> np.array:
@@ -20,8 +17,7 @@ class KernelApproximation:
     @staticmethod
     def calc_C_U(data: np.array, farthest_idx: List[int], sigma: float) -> Tuple[np.array, np.array]:
         """
-        A Nyström approximation of the kernel matrix.
-        Construct sub-matrices C & U (no need for R - the kernel matrix is symmetric -> R = C.T):
+        Compute the Nyström approximation matrices of the kernel matrix (so that K ~ C @ U @ C.T).
         :param data: the data (num_samples, point_dim)
         :param farthest_idx: the indices of the sampled points
         :param sigma: the distance scale hyper-parameter
