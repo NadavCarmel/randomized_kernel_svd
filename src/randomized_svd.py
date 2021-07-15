@@ -6,7 +6,7 @@ import utils
 
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
-    def randomized_svd(self, C_scaled, D_norm, U, projection_dim, num_components):
+    def randomized_svd(self, C_scaled: np.array, D_norm: np.array, U: np.array, projection_dim: int, num_components: int):
         """
         Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
@@ -44,7 +44,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
         return U, s, Vh
 
-    def run_all(self, config_path = '../config.yaml'):
+    def run_all(self, config_path):
         configs = utils.read_yaml(yaml_path=config_path)
         data_pth = configs['data_path']
         data = utils.load_pickle(pickle_path=data_pth)
@@ -78,8 +78,9 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
 
 if __name__ == '__main__':
+    config_path = '../config.yaml'
     rsvd = RandomizedSVD()
-    U, s, Vh = rsvd.run_all()
+    U, s, Vh = rsvd.run_all(config_path=config_path)
     print('dine execution')
 
 
