@@ -6,7 +6,7 @@ import utils
 
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
-    def randomized_svd(self, C_scaled: np.array, D_norm: np.array, U: np.array, projection_dim: int):
+    def randomized_svd(self, C_scaled: np.array, D_sqrt: np.array, U: np.array, projection_dim: int):
         """
         Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
@@ -39,7 +39,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Project U back to the original space:
         U = Q @ U
 
-        U2 = U / D_norm
+        U2 = U / D_sqrt
 
         return U, s, Vh
 
@@ -47,6 +47,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         configs = utils.read_yaml(yaml_path=config_path)
         data_pth = configs['data_path']
         data = utils.load_pickle(pickle_path=data_pth)
+        data = data[:10, :]  # todo: remove
         num_points_to_sample = configs['num_points_to_sample']
         sigma = configs['sigma']
         projection_dim = configs['projection_dim']
@@ -63,11 +64,11 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
                              sigma=sigma)
 
         # Scale the rows of C:
-        C_scaled, D_norm = self.normalize_C(C=C, U=U)
+        C_scaled, D_sqrt = self.normalize_C(C=C, U=U)
 
         # Execute the randomized SVD flow:
         U, s, Vh = self.randomized_svd(C_scaled=C_scaled,
-                                       D_norm=D_norm,
+                                       D_sqrt=D_sqrt,
                                        U=U,
                                        projection_dim=projection_dim)
 

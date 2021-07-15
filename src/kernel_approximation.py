@@ -37,9 +37,9 @@ class KernelApproximation:
         # Scale the rows of C:
         D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))  # efficient summation of each row in the approximated kernel
         D = np.clip(D, a_min=1, a_max=None)  # clip D so that each element is at least 1, as in the sum of the original kernel matrix
-        D_norm = D ** 0.5
-        C_scaled = C / D_norm  # this will convert K to D ** -0.5 @ K @ D ** -0.5
-        return C_scaled, D_norm
+        D_sqrt = D ** 0.5
+        C_scaled = C / D_sqrt  # this will convert K to D ** -0.5 @ K @ D ** -0.5
+        return C_scaled, D_sqrt
 
 
 if __name__ == '__main__':

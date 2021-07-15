@@ -1,4 +1,5 @@
 data_path: '../data/randn_100_3.pkl'
 sigma: 1
-num_points_to_sample : 100  # for FPS
-projection_dim: 100
+num_points_to_sample : 10  # for FPS
+projection_dim: 10
+
