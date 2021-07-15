@@ -6,7 +6,7 @@ import utils
 
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
-    def randomized_svd(self, C_scaled: np.array, D_norm: np.array, U: np.array, projection_dim: int, num_components: int):
+    def randomized_svd(self, C_scaled: np.array, D_norm: np.array, U: np.array, projection_dim: int):
         """
         Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
@@ -15,8 +15,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         :param C_scaled: the scaled (row-wise) sampled columns
         :param D_norm: the normalizer of C (sum of each row of C ** 0.5)
         :param U: the sampled rows + columns
-        :param projection_dim: the new dimension on which we project the kernel
-        :param num_components: the number of SVD components to return
+        :param projection_dim: the new dimension on which we project the kernel (also, the number of SVD components returned)
         :return: U, s, Vh -> the (truncated) SVD decomposition of the approximated kernel
         """
 
@@ -71,8 +70,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         U, s, Vh = self.randomized_svd(C_scaled=C_scaled,
                                        D_norm=D_norm,
                                        U=U,
-                                       projection_dim=projection_dim,
-                                       num_components=num_components)
+                                       projection_dim=projection_dim)
 
         return U, s, Vh
 
