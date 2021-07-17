@@ -8,7 +8,7 @@ import utils
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
     @staticmethod
-    def randomized_svd(C_scaled: np.array, U: np.array, projection_dim: int) -> Tuple[np.array, np.array, np.array]:
+    def randomized_svd(C_scaled: np.array, U_inv: np.array, projection_dim: int) -> Tuple[np.array, np.array, np.array]:
         """
         Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
@@ -26,13 +26,13 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         R = np.random.randn(C_scaled.shape[0], projection_dim)
 
         # Project the approximated kernel on the random space:
-        P = C_scaled @ (U @ (C_scaled.T @ R))
+        P = C_scaled @ (U_inv @ (C_scaled.T @ R))
 
         # Compute the orthonormal representation of the projection array (P):
         Q, _ = np.linalg.qr(P, mode='reduced')
 
         # Project the approximated kernel on the orthonormal space (Q):
-        W = ((Q.T @ C_scaled) @ U) @ C_scaled.T
+        W = ((Q.T @ C_scaled) @ U_inv) @ C_scaled.T
 
         # Execute SVD on the 'compressed' matrix W:
         U, s, Vh = np.linalg.svd(W, full_matrices=False, compute_uv=True, hermitian=False)
@@ -65,12 +65,12 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
                              sigma=sigma)
 
         # Scale the rows of C:
-        C_scaled, D_sqrt = self.normalize_C(C=C, U_inv=U_inv)
+        C_scaled = self.normalize_C(C=C, U_inv=U_inv)
 
         # MAIN STEP 2: execute the randomized SVD flow:
 
         U, s, Vh = self.randomized_svd(C_scaled=C_scaled,
-                                       U=U,
+                                       U_inv=U_inv,
                                        projection_dim=projection_dim)
 
         return U, s, Vh
