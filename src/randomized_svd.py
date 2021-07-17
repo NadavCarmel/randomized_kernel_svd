@@ -39,8 +39,6 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Project U back to the original space:
         U = Q @ U
 
-        # U = U * D_sqrt  # if we want to compute the random walk Laplacian SVD (L := I - D ** -1 @ K)
-
         return U, s, Vh
 
     def run_all(self, config_path):
@@ -68,7 +66,8 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # Scale the rows of C:
         C_scaled, D_sqrt = self.normalize_C(C=C, U=U)
 
-        # Execute the randomized SVD flow:
+        # MAIN STEP 2: execute the randomized SVD flow:
+
         U, s, Vh = self.randomized_svd(C_scaled=C_scaled,
                                        D_sqrt=D_sqrt,
                                        U=U,
@@ -85,6 +84,7 @@ if __name__ == '__main__':
 
 
 # TESTS:
+
 # from scipy.spatial.distance import cdist
 # d = cdist(data[farthest_idx],data[farthest_idx], metric='sqeuclidean')
 # K = np.exp(-d/sigma)
@@ -95,6 +95,11 @@ if __name__ == '__main__':
 # U_test, s_test, Vh_test = np.linalg.svd(K_norm, full_matrices=False, compute_uv=True, hermitian=False)
 
 # test Random walk normalized Laplacian:
+# U = U * D_sqrt  # if we want to compute the random walk Laplacian SVD (L := I - D ** -1 @ K) (**not correct mathematically**)
+
 # D_diag = np.diag(np.squeeze(D_sqrt **  2))
 # K_norm = np.linalg.inv(D_diag) @ K
 # U_test, s_test, Vh_test = np.linalg.svd(K_norm, full_matrices=False, compute_uv=True, hermitian=False)
+# [e_k, v_k] = np.linalg.eigh(K_norm @ K_norm.T)
+
+
