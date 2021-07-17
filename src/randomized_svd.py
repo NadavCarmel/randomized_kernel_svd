@@ -15,7 +15,7 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         Computation is based on all steps of the randomized svd
 
         :param C_scaled: the scaled (row-wise) sampled columns
-        :param U: the sampled rows + columns
+        :param U_inv: the sampled rows + columns
         :param projection_dim: the new dimension on which we project the kernel (also, the number of SVD components returned)
         :return: U, s, Vh -> the (truncated) SVD decomposition of the approximated kernel
         """
@@ -61,8 +61,8 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
         # Calc C and U:
         C, U_inv = self.calc_C_U(data=data,
-                             farthest_idx=farthest_idx,
-                             sigma=sigma)
+                                 farthest_idx=farthest_idx,
+                                 sigma=sigma)
 
         # Scale the rows of C:
         C_scaled = self.normalize_C(C=C, U_inv=U_inv)
@@ -80,7 +80,7 @@ if __name__ == '__main__':
     config_path = '../config.yaml'
     rsvd = RandomizedSVD()
     U, s, Vh = rsvd.run_all(config_path=config_path)
-    print('dine execution')
+    print('done execution')
 
 
 # TESTS:
