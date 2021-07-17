@@ -28,14 +28,14 @@ class KernelApproximation:
         d /= sigma
         C = np.exp(-d)
         U = C[farthest_idx, :]
-        U = np.linalg.pinv(U)
-        return C, U
+        U_inv = np.linalg.pinv(U)
+        return C, U_inv
 
     @staticmethod
-    def normalize_C(C: np.array, U: np.array) -> Tuple[np.array, np.array]:
+    def normalize_C(C: np.array, U_inv: np.array) -> Tuple[np.array, np.array]:
         print('start working on normalize_C')
         # Scale the rows of C:
-        D = C @ (U @ (C.T @ np.ones((C.shape[0], 1))))  # efficient summation of each row in the approximated kernel
+        D = C @ (U_inv @ (C.T @ np.ones((C.shape[0], 1))))  # efficient summation of each row in the approximated kernel
         D = np.clip(D, a_min=1, a_max=None)  # clip D so that each element is at least 1, as in the sum of the original kernel matrix
         D_sqrt = D ** 0.5
         C_scaled = C / D_sqrt  # this will convert K to D ** -0.5 @ K @ D ** -0.5
@@ -58,6 +58,6 @@ if __name__ == '__main__':
     # calc kernel approximation C and U:
     sigma = configs['sigma']
     ka = KernelApproximation()
-    C, U = ka.calc_C_U(data=data, farthest_idx=farthest_idx, sigma=sigma)
-    C_scaled, D_norm = ka.normalize_C(C=C, U=U)
+    C, U_inv = ka.calc_C_U(data=data, farthest_idx=farthest_idx, sigma=sigma)
+    C_scaled, D_norm = ka.normalize_C(C=C, U_inv=U_inv)
     print('done execution')

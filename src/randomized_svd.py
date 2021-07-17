@@ -1,3 +1,4 @@
+from typing import Tuple
 import numpy as np
 from fps_sampling import FpsSampling
 from kernel_approximation import KernelApproximation
@@ -6,14 +7,14 @@ import utils
 
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
-    def randomized_svd(self, C_scaled: np.array, D_sqrt: np.array, U: np.array, projection_dim: int):
+    @staticmethod
+    def randomized_svd(C_scaled: np.array, U: np.array, projection_dim: int) -> Tuple[np.array, np.array, np.array]:
         """
         Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
         Computation is based on all steps of the randomized svd
 
         :param C_scaled: the scaled (row-wise) sampled columns
-        :param D_norm: the normalizer of C (sum of each row of C ** 0.5)
         :param U: the sampled rows + columns
         :param projection_dim: the new dimension on which we project the kernel (also, the number of SVD components returned)
         :return: U, s, Vh -> the (truncated) SVD decomposition of the approximated kernel
@@ -59,17 +60,16 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         farthest_idx.sort()  # todo: remove
 
         # Calc C and U:
-        C, U = self.calc_C_U(data=data,
+        C, U_inv = self.calc_C_U(data=data,
                              farthest_idx=farthest_idx,
                              sigma=sigma)
 
         # Scale the rows of C:
-        C_scaled, D_sqrt = self.normalize_C(C=C, U=U)
+        C_scaled, D_sqrt = self.normalize_C(C=C, U_inv=U_inv)
 
         # MAIN STEP 2: execute the randomized SVD flow:
 
         U, s, Vh = self.randomized_svd(C_scaled=C_scaled,
-                                       D_sqrt=D_sqrt,
                                        U=U,
                                        projection_dim=projection_dim)
 
@@ -86,7 +86,7 @@ if __name__ == '__main__':
 # TESTS:
 
 # from scipy.spatial.distance import cdist
-# d = cdist(data[farthest_idx],data[farthest_idx], metric='sqeuclidean')
+# d = cdist(data, data, metric='sqeuclidean')
 # K = np.exp(-d/sigma)
 
 # test Symmetric normalized Laplacian:
