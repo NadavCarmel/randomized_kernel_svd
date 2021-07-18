@@ -1,5 +1,6 @@
 from typing import Tuple
 import numpy as np
+# from sklearn
 from fps_sampling import FpsSampling
 from kernel_approximation import KernelApproximation
 import utils
@@ -10,14 +11,14 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
     @staticmethod
     def randomized_svd(C_scaled: np.array, U_inv: np.array, projection_dim: int) -> Tuple[np.array, np.array, np.array]:
         """
-        Assume we want to compute the m smallest components for L := I - D**-0.5 @ K @ D**-0.5
-        We convert the problem into finding the m largest components of D**-0.5 @ K @ D**-0.5
+        Assume we want to compute the 'projection_dim' smallest components for L := I - D**-0.5 @ K @ D**-0.5
+        We convert the problem into finding the 'projection_dim' largest components of D**-0.5 @ K @ D**-0.5
         Computation is based on all steps of the randomized svd
 
         :param C_scaled: the scaled (row-wise) sampled columns
         :param U_inv: the sampled rows + columns
         :param projection_dim: the new dimension on which we project the kernel (also, the number of SVD components returned)
-        :return: U, s, Vh -> the (truncated) SVD decomposition of the approximated kernel
+        :return: U, s, Vh -> the SVD decomposition of the approximated kernel
         """
 
         print('start working on randomized_svd')
