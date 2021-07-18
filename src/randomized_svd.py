@@ -80,23 +80,6 @@ if __name__ == '__main__':
     print('done execution')
 
 
-# TESTS:
 
-# from scipy.spatial.distance import cdist
-# d = cdist(data, data, metric='sqeuclidean')
-# K = np.exp(-d/sigma)
-
-# test Symmetric normalized Laplacian:
-# D_sqrt_diag = np.diag(np.squeeze(D_sqrt))
-# K_norm = np.linalg.inv(D_sqrt_diag) @ K @ np.linalg.inv(D_sqrt_diag)
-# U_test, s_test, Vh_test = np.linalg.svd(K_norm, full_matrices=False, compute_uv=True, hermitian=False)
-
-# test Random walk normalized Laplacian:
-# U = U * D_sqrt  # if we want to compute the random walk Laplacian SVD (L := I - D ** -1 @ K) (**not correct mathematically**)
-
-# D_diag = np.diag(np.squeeze(D_sqrt **  2))
-# K_norm = np.linalg.inv(D_diag) @ K
-# U_test, s_test, Vh_test = np.linalg.svd(K_norm, full_matrices=False, compute_uv=True, hermitian=False)
-# [e_k, v_k] = np.linalg.eigh(K_norm @ K_norm.T)
 
 
