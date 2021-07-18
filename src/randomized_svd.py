@@ -44,9 +44,8 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
 
     def run_all(self, config_path):
         configs = utils.read_yaml(yaml_path=config_path)
-        data_pth = configs['data_path']
-        data = utils.load_pickle(pickle_path=data_pth)
-        data = data[:10, :]  # todo: remove
+        data_path = configs['data_path']
+        data = utils.load_pickle(pickle_path=data_path)
         num_points_to_sample = configs['num_points_to_sample']
         sigma = configs['sigma']
         projection_dim = configs['projection_dim']
@@ -56,8 +55,6 @@ class RandomizedSVD(FpsSampling, KernelApproximation):
         # FPS sampling:
         farthest_idx = self.fps_sampling(point_array=data,
                                          num_points_to_sample=num_points_to_sample)
-
-        farthest_idx.sort()  # todo: remove
 
         # Calc C and U:
         C, U_inv = self.calc_C_U(data=data,
