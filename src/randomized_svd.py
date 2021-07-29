@@ -1,6 +1,5 @@
 from typing import Tuple
 import numpy as np
-# from sklearn
 from fps_sampling import FpsSampling
 from kernel_approximation import KernelApproximation
 import utils
@@ -9,7 +8,7 @@ import utils
 class RandomizedSVD(FpsSampling, KernelApproximation):
 
     @staticmethod
-    def randomized_svd(C_scaled: np.array, U_inv: np.array, projection_dim: int) -> Tuple[np.array, np.array, np.array]:
+    def randomized_svd(C_scaled: np.array, U_inv: np.array, projection_dim: int, power_iter: int = 30) -> Tuple[np.array, np.array, np.array]:
         """
         Assume we want to compute the 'projection_dim' smallest components for L := I - D**-0.5 @ K @ D**-0.5
         We convert the problem into finding the 'projection_dim' largest components of D**-0.5 @ K @ D**-0.5
@@ -78,6 +77,15 @@ if __name__ == '__main__':
     config_path = '../config.yaml'
     rsvd = RandomizedSVD()
     U, s, Vh = rsvd.run_all(config_path=config_path)
+
+    # calc exact SVD (for error analysis):
+    data = utils.load_pickle(pickle_path='../data/randn_100_3.pkl')
+    from kernel_approximation import KernelApproximation
+    K_exact = KernelApproximation.calc_exact_kernel(data=data, sigma=1)
+    D = np.sum()
+    U_exact, s_exact, Vh_exact = np.linalg.svd(K_exact, full_matrices=False, compute_uv=True, hermitian=True)
+    print(s[:10] / s_exact[:10])
+    np.sort()
     print('done execution')
 
 

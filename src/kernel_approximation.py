@@ -10,8 +10,7 @@ class KernelApproximation:
         # Exact kernel matrix calculation:
         print('calculate exact kernel')
         d = spatial.distance.cdist(data, data, metric='sqeuclidean')
-        d /= (d.mean() * sigma)
-        k = np.exp(-d)
+        k = np.exp(-d/sigma)
         return 0.5 * (k + k.T)  # only for numerical considerations
 
     @staticmethod
@@ -25,8 +24,7 @@ class KernelApproximation:
         """
         print('start working on calc_C_U')
         d = spatial.distance.cdist(data, data[farthest_idx], metric='sqeuclidean')
-        d /= sigma
-        C = np.exp(-d)
+        C = np.exp(-d/sigma)
         U = C[farthest_idx, :]
         U_inv = np.linalg.pinv(U)
         return C, U_inv
