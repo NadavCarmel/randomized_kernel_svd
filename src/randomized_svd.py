@@ -79,13 +79,17 @@ if __name__ == '__main__':
     U, s, Vh = rsvd.run_all(config_path=config_path)
 
     # calc exact SVD (for error analysis):
+    # construct the normalized kernel:
     data = utils.load_pickle(pickle_path='../data/randn_100_3.pkl')
     from kernel_approximation import KernelApproximation
     K_exact = KernelApproximation.calc_exact_kernel(data=data, sigma=1)
-    D = np.sum()
-    U_exact, s_exact, Vh_exact = np.linalg.svd(K_exact, full_matrices=False, compute_uv=True, hermitian=True)
+    D_exact = np.sum(K_exact, axis=1)
+    D_exact_sqrt = np.diag(D_exact ** 0.5)
+    D_exact_sqrt_inv = np.linalg.inv(D_exact_sqrt)
+    K_exact_normed = D_exact_sqrt_inv @ K_exact @ D_exact_sqrt_inv
+    # exact SVD compute:
+    U_exact, s_exact, Vh_exact = np.linalg.svd(K_exact_normed, full_matrices=False, compute_uv=True, hermitian=True)
     print(s[:10] / s_exact[:10])
-    np.sort()
     print('done execution')
 
 

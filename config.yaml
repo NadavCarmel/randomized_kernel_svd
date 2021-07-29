@@ -1,5 +1,5 @@
 data_path: '../data/randn_100_3.pkl'
 sigma: 1
-num_points_to_sample : 100  # for FPS sampling, possibly set to ~10% of the datta size
-projection_dim: 100 # usually set this to: ~num_points_to_sample
+num_points_to_sample : 10  # for FPS sampling, possibly set to ~10% of the datta size
+projection_dim: 10 # usually set this to: ~num_points_to_sample
 
